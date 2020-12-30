@@ -1,44 +1,35 @@
 package com.hoanganh.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameModel {
-	private Long id;
-	private Long winner;
-	private Long playerId;
-	
-	private Object players;
+  private Long id;
+  private Map<String, String> players = new HashMap<String, String>();
+  private GameInfoModel game;
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public Long getWinner() {
-		return winner;
-	}
+  public Map<String, String> getPlayers() {
+    return players;
+  }
 
-	public void setWinner(Long winner) {
-		this.winner = winner;
-	}
+  public void setPlayers(Map<String, String> players) {
+    this.players = players;
+  }
 
-	public Long getPlayerId() {
-		return playerId;
-	}
+  public GameInfoModel getGame() {
+    return game;
+  }
 
-	public void setPlayerId(Long playerId) {
-		this.playerId = playerId;
-	}
+  public void setGame(GameInfoModel game) {
+    this.game = game;
+  }
 
-	public Object getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(Object players) {
-		this.players = players;
-	}
-	
-	
-	
 }

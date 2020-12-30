@@ -33,5 +33,15 @@ public class PlayerService implements IPlayerService{
 		playerDAO.delete(ids);
 		
 	}
+
+    @Override
+    public Long findPointById(Long id) {
+        return playerDAO.findPointById(id);
+    }
+
+    @Override
+    public PlayerModel findOne(Long id) {
+        return playerDAO.findOne(id);
+    }
 	
 }

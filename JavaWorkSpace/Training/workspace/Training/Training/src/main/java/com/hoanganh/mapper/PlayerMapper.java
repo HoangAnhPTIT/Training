@@ -21,5 +21,15 @@ public class PlayerMapper implements RowMapper<PlayerModel>{
 		}
 		return model;
 	}
+	
+	public Long mapPoint(ResultSet result) {
+	    Long point = null;
+	    try {
+	        point = result.getLong("points");
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return point;
+	}
 
 }
