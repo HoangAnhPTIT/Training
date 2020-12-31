@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,7 @@ import com.hoanganh.model.GameInfoModel;
 import com.hoanganh.model.GameModel;
 import com.hoanganh.model.Leaderboard;
 import com.hoanganh.model.PlayerModel;
+import com.hoanganh.model.ShowGameInfo;
 import com.hoanganh.service.IGameService;
 import com.hoanganh.service.IPlayerService;
 import com.hoanganh.service.impl.GameService;
@@ -83,7 +83,9 @@ public class GameController extends HttpServlet {
     Long id = gameService.save(model);
     model.setId(id);
     game.setId(id);
-    mapper.writeValue(response.getOutputStream(), model);
+    ShowGameInfo gameInfo = new ShowGameInfo();
+    gameInfo.setGame(game);
+    mapper.writeValue(response.getOutputStream(), gameInfo);
   }
 
   @POST
@@ -117,8 +119,9 @@ public class GameController extends HttpServlet {
     game.setPlayers(listPlayers);
     game.setId(id);
     game.setWinner(gameModel.getWinner());
-    gameModel.setGame(game);
-    mapper.writeValue(response.getOutputStream(), gameModel);
+    ShowGameInfo gameInfo = new ShowGameInfo();
+    gameInfo.setGame(game);
+    mapper.writeValue(response.getOutputStream(), gameInfo);
   }
 
   @DELETE
@@ -152,8 +155,9 @@ public class GameController extends HttpServlet {
     game.setPlayers(listPlayers);
     game.setId(id);
     game.setWinner(gameModel.getWinner());
-    gameModel.setGame(game);
-    mapper.writeValue(response.getOutputStream(), gameModel);
+    ShowGameInfo gameInfo = new ShowGameInfo();
+    gameInfo.setGame(game);
+    mapper.writeValue(response.getOutputStream(), gameInfo);
   }
 
   @PUT
@@ -190,8 +194,9 @@ public class GameController extends HttpServlet {
       SetListPlayer setListPlayer = new SetListPlayer();
       setListPlayer.setListPlayer(gameModel, listPlayers);
       SetGameInfo setGameIndo = new SetGameInfo();
-      setGameIndo.setGameInfo(listPlayers, gameModel, id);
-      mapper.writeValue(response.getOutputStream(), gameModel);
+      ShowGameInfo gameInfo = new ShowGameInfo();
+      setGameIndo.setGameInfo(listPlayers, gameModel, id, gameInfo);
+      mapper.writeValue(response.getOutputStream(), gameInfo);
     } else {
       mapper.writeValue(response.getOutputStream(), "Action invalid");
       return;
@@ -213,8 +218,10 @@ public class GameController extends HttpServlet {
     SetListPlayer setListPlayer = new SetListPlayer();
     setListPlayer.setListPlayer(gameModel, listPlayers);
     SetGameInfo setGameIndo = new SetGameInfo();
-    setGameIndo.setGameInfo(listPlayers, gameModel, id);
-    mapper.writeValue(response.getOutputStream(), gameModel);
+    ShowGameInfo gameInfo = new ShowGameInfo();
+    setGameIndo.setGameInfo(listPlayers, gameModel, id, gameInfo);
+    
+    mapper.writeValue(response.getOutputStream(), gameInfo);
   }
 
   @GET
@@ -229,9 +236,7 @@ public class GameController extends HttpServlet {
     Leaderboard leaderboard = new Leaderboard();
     PlayerModel playerModel = new PlayerModel();
     playerModel.setListPlayerModel(playerService.findAll());
-    
     List<Map<String, String>> players = new ArrayList<Map<String, String>>();
-    
     for(PlayerModel model:playerModel.getListPlayerModel()) {
       Map<String, String> player = new HashMap<String, String>();
       player.put("id", model.getPlayer_id().toString());
