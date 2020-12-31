@@ -29,4 +29,10 @@ public class GameService implements IGameService{
       return gameDAO.findOne(id);
     }
 
+    @Override
+    public void update(GameModel model) {
+      gameDAO.update(model);
+      
+    }
+
 }

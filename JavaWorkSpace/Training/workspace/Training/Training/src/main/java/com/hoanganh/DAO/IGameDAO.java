@@ -8,4 +8,5 @@ public interface IGameDAO {
     Long save(GameModel model);
     List<GameModel> findByPlayerId(Long id);
     GameModel findOne(Long id);
+    void update(GameModel model);
 }

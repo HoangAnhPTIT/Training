@@ -39,4 +39,20 @@ public class GameDAO extends AbstractDAO implements IGameDAO {
     return list.isEmpty() ? null : list.get(0);
   }
 
+  @Override
+  public void update(GameModel model) {
+    GameModel modelDB = findOne(model.getId());
+    if(modelDB != null) {
+      if(model.getPlayer1() == null) {
+        model.setPlayer1(modelDB.getPlayer1());
+      } else if(model.getPlayer2() == null) {
+        model.setPlayer2(modelDB.getPlayer2());
+      } else if(model.getWinner() == null) {
+        model.setWinner(modelDB.getWinner());
+      }
+    }
+   String sql = "UPDATE game SET player1=?, player2=?, winner=? WHERE id=?";
+   update(sql, model.getPlayer1(), model.getPlayer2(), model.getWinner(), model.getId());
+  }
+
 }

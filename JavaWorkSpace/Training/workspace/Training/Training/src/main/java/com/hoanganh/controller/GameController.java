@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,6 +35,7 @@ import com.hoanganh.service.IPlayerService;
 import com.hoanganh.service.impl.GameService;
 import com.hoanganh.service.impl.PlayerService;
 import com.hoanganh.utils.HttpUtil;
+import com.hoanganh.utils.SetGameInfo;
 import com.hoanganh.utils.SetListPlayer;
 
 @Path("/games")
@@ -85,8 +89,9 @@ public class GameController extends HttpServlet {
   @Path("/{id}/{action}")
   @Consumes({ MediaType.APPLICATION_JSON })
   @Produces({ MediaType.APPLICATION_JSON })
-  public void scorePoint(@PathParam("id") Long id, @PathParam("action") String action ,@Context HttpServletRequest request,
-      @Context HttpServletResponse response, InputStream requestBody) throws ServletException, IOException {
+  public void scorePoint(@PathParam("id") Long id, @PathParam("action") String action,
+      @Context HttpServletRequest request, @Context HttpServletResponse response, InputStream requestBody)
+      throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
     request.setCharacterEncoding("UTF-8");
     response.setContentType("application/json");
@@ -94,21 +99,15 @@ public class GameController extends HttpServlet {
     PlayerModel playerModel = HttpUtil.of(reader).toModel(PlayerModel.class);
     GameModel gameModel = gameService.findOne(id);
     playerModel = playerService.findOne(playerModel.getPlayer_id());
-    if(action.equals("score")) {
-      if (gameModel.getPlayer1() == playerModel.getPlayer_id() || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
+    if (action.equals("score")) {
+      if (gameModel.getPlayer1() == playerModel.getPlayer_id()
+          || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
         playerModel.setPoint(playerModel.getPoint() + 1);
       } else {
         mapper.writeValue(response.getOutputStream(), "Player's id invalid");
         return;
       }
-    } else if(action.equals("reset_point")) {
-      if (gameModel.getPlayer1() == playerModel.getPlayer_id() || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
-        playerModel.setPoint(0L);
-      } else {
-        mapper.writeValue(response.getOutputStream(), "Player's id invalid");
-        return;
-      }
-    }  
+    }
     playerService.update(playerModel);
     List<Map<String, String>> listPlayers = new ArrayList<Map<String, String>>();
     SetListPlayer setListPlayer = new SetListPlayer();
@@ -121,6 +120,73 @@ public class GameController extends HttpServlet {
     mapper.writeValue(response.getOutputStream(), gameModel);
   }
 
- 
-  
+  @DELETE
+  @Path("/{id}/{action}")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void resetPoint(@PathParam("id") Long id, @PathParam("action") String action,
+      @Context HttpServletRequest request, @Context HttpServletResponse response, InputStream requestBody)
+      throws ServletException, IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+    PlayerModel playerModel = HttpUtil.of(reader).toModel(PlayerModel.class);
+    GameModel gameModel = gameService.findOne(id);
+    playerModel = playerService.findOne(playerModel.getPlayer_id());
+    if (action.equals("reset_point")) {
+      if (gameModel.getPlayer1() == playerModel.getPlayer_id()
+          || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
+        playerModel.setPoint(0L);
+      } else {
+        mapper.writeValue(response.getOutputStream(), "Player's id invalid");
+        return;
+      }
+    }
+    playerService.update(playerModel);
+    List<Map<String, String>> listPlayers = new ArrayList<Map<String, String>>();
+    SetListPlayer setListPlayer = new SetListPlayer();
+    setListPlayer.setListPlayer(gameModel, listPlayers);
+    GameInfoModel game = new GameInfoModel();
+    game.setPlayers(listPlayers);
+    game.setId(id);
+    game.setWinner(gameModel.getWinner());
+    gameModel.setGame(game);
+    mapper.writeValue(response.getOutputStream(), gameModel);
+  }
+
+  @PUT
+  @Path("/{id}/{action}")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void endGame(@PathParam("id") Long id, @PathParam("action") String action, @Context HttpServletRequest request,
+      @Context HttpServletResponse response, InputStream requestBody) throws ServletException, IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    if (action.equals("end")) {
+      GameModel gameModel = gameService.findOne(id);
+      PlayerModel player1 = playerService.findOne(gameModel.getPlayer1());
+      PlayerModel player2 = playerService.findOne(gameModel.getPlayer2());
+      if (player1.getPoint() > player2.getPoint()) {
+        gameModel.setWinner(player1.getPlayer_id());
+      } else if (player1.getPoint() < player2.getPoint()) {
+        gameModel.setWinner(player2.getPlayer_id());
+      } else {
+        mapper.writeValue(response.getOutputStream(), "Unknown Winner !!!");
+        return;
+      }
+      gameService.update(gameModel);
+      List<Map<String, String>> listPlayers = new ArrayList<Map<String, String>>();
+      SetListPlayer setListPlayer = new SetListPlayer();
+      setListPlayer.setListPlayer(gameModel, listPlayers);
+      SetGameInfo setGameIndo = new SetGameInfo();
+      setGameIndo.setGameInfo(listPlayers, gameModel, id);
+      mapper.writeValue(response.getOutputStream(), gameModel);
+    } else {
+      mapper.writeValue(response.getOutputStream(), "Action invalid");
+      return;
+    }
+
+  }
 }
