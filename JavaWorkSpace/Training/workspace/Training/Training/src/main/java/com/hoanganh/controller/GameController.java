@@ -82,10 +82,10 @@ public class GameController extends HttpServlet {
   }
 
   @POST
-  @Path("/{id}/score")
+  @Path("/{id}/{action}")
   @Consumes({ MediaType.APPLICATION_JSON })
   @Produces({ MediaType.APPLICATION_JSON })
-  public void scorePoint(@PathParam("id") Long id, @Context HttpServletRequest request,
+  public void scorePoint(@PathParam("id") Long id, @PathParam("action") String action ,@Context HttpServletRequest request,
       @Context HttpServletResponse response, InputStream requestBody) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
     request.setCharacterEncoding("UTF-8");
@@ -94,12 +94,21 @@ public class GameController extends HttpServlet {
     PlayerModel playerModel = HttpUtil.of(reader).toModel(PlayerModel.class);
     GameModel gameModel = gameService.findOne(id);
     playerModel = playerService.findOne(playerModel.getPlayer_id());
-    if (gameModel.getPlayer1() == playerModel.getPlayer_id() || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
-      playerModel.setPoint(playerModel.getPoint() + 1);
-    } else {
-      mapper.writeValue(response.getOutputStream(), "Player's id invalid");
-      return;
-    }
+    if(action.equals("score")) {
+      if (gameModel.getPlayer1() == playerModel.getPlayer_id() || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
+        playerModel.setPoint(playerModel.getPoint() + 1);
+      } else {
+        mapper.writeValue(response.getOutputStream(), "Player's id invalid");
+        return;
+      }
+    } else if(action.equals("reset_point")) {
+      if (gameModel.getPlayer1() == playerModel.getPlayer_id() || gameModel.getPlayer2() == playerModel.getPlayer_id()) {
+        playerModel.setPoint(0L);
+      } else {
+        mapper.writeValue(response.getOutputStream(), "Player's id invalid");
+        return;
+      }
+    }  
     playerService.update(playerModel);
     List<Map<String, String>> listPlayers = new ArrayList<Map<String, String>>();
     SetListPlayer setListPlayer = new SetListPlayer();
@@ -111,4 +120,7 @@ public class GameController extends HttpServlet {
     gameModel.setGame(game);
     mapper.writeValue(response.getOutputStream(), gameModel);
   }
+
+ 
+  
 }
