@@ -11,7 +11,7 @@ public class PlayerMapper implements RowMapper<PlayerModel>{
 	public PlayerModel mapRow(ResultSet result) {
 		PlayerModel model = new PlayerModel();
 		try {
-			model.setId(result.getLong("id"));
+			model.setPlayer_id(result.getLong("id"));
 			model.setFullName(result.getString("fullname"));
 			model.setLoseCount(result.getLong("losecount"));
 			model.setWinsCount(result.getLong("winscount"));

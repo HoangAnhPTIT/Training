@@ -28,20 +28,20 @@ public class PlayerDAO extends AbstractDAO implements IPlayerDAO {
 
     @Override
     public void update(PlayerModel model) {
-//        PlayerModel modelDB = playerService.findOne(model.getId());
-//        if (modelDB != null) {
-//            if (model.getFullName() == null) {
-//                model.setFullName(modelDB.getFullName());
-//            } else if (model.getPoint() == null) {
-//                model.setPoint(modelDB.getPoint());
-//            } else if (model.getLoseCount() == null) {
-//                model.setLoseCount(modelDB.getLoseCount());
-//            } else if (model.getWinsCount() == null) {
-//                model.setWinsCount(modelDB.getWinsCount());
-//            }
-//        }
+        PlayerModel modelDB = findOne(model.getPlayer_id());
+        if (modelDB != null) {
+            if (model.getFullName() == null) {
+                model.setFullName(modelDB.getFullName());
+            } else if (model.getPoint() == null) {
+                model.setPoint(modelDB.getPoint());
+            } else if (model.getLoseCount() == null) {
+                model.setLoseCount(modelDB.getLoseCount());
+            } else if (model.getWinsCount() == null) {
+                model.setWinsCount(modelDB.getWinsCount());
+            }
+        }
         String sql = "UPDATE player set fullname=?, points=?, losecount=?, winscount=? WHERE id=?";
-        update(sql, model.getFullName(), model.getPoint(), model.getLoseCount(), model.getWinsCount(), model.getId());
+        update(sql, model.getFullName(), model.getPoint(), model.getLoseCount(), model.getWinsCount(), model.getPlayer_id());
 
     }
 

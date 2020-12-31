@@ -5,13 +5,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.hoanganh.DAO.IPlayerDAO;
+import com.hoanganh.DAO.impl.PlayerDAO;
 import com.hoanganh.model.PlayerModel;
 import com.hoanganh.service.IPlayerService;
 
 public class PlayerService implements IPlayerService{
 
-	@Inject
-	private IPlayerDAO playerDAO;
+//	@Inject
+	private IPlayerDAO playerDAO = new PlayerDAO();
 		
 	@Override
 	public List<PlayerModel> findAll() {
