@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoanganh.model.GameInfoModel;
 import com.hoanganh.model.GameModel;
+import com.hoanganh.model.Leaderboard;
 import com.hoanganh.model.PlayerModel;
 import com.hoanganh.service.IGameService;
 import com.hoanganh.service.IPlayerService;
@@ -170,8 +171,16 @@ public class GameController extends HttpServlet {
       PlayerModel player2 = playerService.findOne(gameModel.getPlayer2());
       if (player1.getPoint() > player2.getPoint()) {
         gameModel.setWinner(player1.getPlayer_id());
+        player1.setWinsCount(player1.getWinsCount()+1);
+        player2.setLoseCount(player2.getLoseCount()+1);
+        playerService.update(player1);
+        playerService.update(player2);
       } else if (player1.getPoint() < player2.getPoint()) {
         gameModel.setWinner(player2.getPlayer_id());
+        player2.setWinsCount(player2.getWinsCount()+1);
+        player1.setLoseCount(player1.getLoseCount()+1);
+        playerService.update(player1);
+        playerService.update(player2);
       } else {
         mapper.writeValue(response.getOutputStream(), "Unknown Winner !!!");
         return;
@@ -189,4 +198,51 @@ public class GameController extends HttpServlet {
     }
 
   }
+
+  @GET
+  @Path("/{id}")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void getGameDetail(@PathParam("id") Long id, @Context HttpServletRequest request,
+      @Context HttpServletResponse response, InputStream requestBody) throws ServletException, IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    GameModel gameModel = gameService.findOne(id);
+    List<Map<String, String>> listPlayers = new ArrayList<Map<String, String>>();
+    SetListPlayer setListPlayer = new SetListPlayer();
+    setListPlayer.setListPlayer(gameModel, listPlayers);
+    SetGameInfo setGameIndo = new SetGameInfo();
+    setGameIndo.setGameInfo(listPlayers, gameModel, id);
+    mapper.writeValue(response.getOutputStream(), gameModel);
+  }
+
+  @GET
+  @Path("/leaderboard")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void getLeaderboard(@Context HttpServletRequest request,
+      @Context HttpServletResponse response, InputStream requestBody) throws ServletException, IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    Leaderboard leaderboard = new Leaderboard();
+    PlayerModel playerModel = new PlayerModel();
+    playerModel.setListPlayerModel(playerService.findAll());
+    
+    List<Map<String, String>> players = new ArrayList<Map<String, String>>();
+    
+    for(PlayerModel model:playerModel.getListPlayerModel()) {
+      Map<String, String> player = new HashMap<String, String>();
+      player.put("id", model.getPlayer_id().toString());
+      player.put("name", model.getFullName());
+      player.put("wins_count", model.getWinsCount().toString());
+      player.put("loses_count", model.getLoseCount().toString());
+      players.add(player);
+    }
+    leaderboard.setPlayers(players);
+    
+    mapper.writeValue(response.getOutputStream(), leaderboard);
+  }
+  
 }

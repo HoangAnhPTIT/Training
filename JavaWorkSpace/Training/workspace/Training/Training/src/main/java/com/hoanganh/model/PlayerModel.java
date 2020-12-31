@@ -12,7 +12,7 @@ public class PlayerModel {
 
   private Long[] ids;
 
-  private List<PlayerModel> listModel = new ArrayList<>();
+  private List<PlayerModel> listPlayerModel = new ArrayList<>();
 
   public Long getPlayer_id() {
     return player_id;
@@ -54,12 +54,13 @@ public class PlayerModel {
     this.winsCount = winsCount;
   }
 
-  public List<PlayerModel> getListModel() {
-    return listModel;
+
+  public List<PlayerModel> getListPlayerModel() {
+    return listPlayerModel;
   }
 
-  public void setListModel(List<PlayerModel> listModel) {
-    this.listModel = listModel;
+  public void setListPlayerModel(List<PlayerModel> listPlayerModel) {
+    this.listPlayerModel = listPlayerModel;
   }
 
   public Long[] getIds() {

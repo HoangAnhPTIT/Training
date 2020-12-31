@@ -44,7 +44,7 @@ public class PlayerController extends HttpServlet {
     request.setCharacterEncoding("UTF-8");
     response.setContentType("application/json");
     PlayerModel model = new PlayerModel();
-    model.setListModel(playerService.findAll());
+    model.setListPlayerModel(playerService.findAll());
     mapper.writeValue(response.getOutputStream(), model);
   }
   @POST

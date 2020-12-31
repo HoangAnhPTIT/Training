@@ -55,4 +55,10 @@ public class GameDAO extends AbstractDAO implements IGameDAO {
    update(sql, model.getPlayer1(), model.getPlayer2(), model.getWinner(), model.getId());
   }
 
+  @Override
+  public List<GameModel> findAll() {
+    String sql = "SELECT * FROM game";
+    return query(sql, new GameMapper());
+  }
+
 }

@@ -35,4 +35,9 @@ public class GameService implements IGameService{
       
     }
 
+    @Override
+    public List<GameModel> findAll() {
+      return gameDAO.findAll();
+    }
+
 }
