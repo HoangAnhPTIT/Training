@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hoanganh.viewmodel.GameInfoModel;
+
 public class GameModel {
   private Long id;
   private Map<String, String> players = new HashMap<String, String>();

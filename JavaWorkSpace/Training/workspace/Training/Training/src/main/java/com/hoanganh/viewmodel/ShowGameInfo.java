@@ -1,4 +1,4 @@
-package com.hoanganh.model;
+package com.hoanganh.viewmodel;
 
 public class ShowGameInfo {
   private GameInfoModel game;

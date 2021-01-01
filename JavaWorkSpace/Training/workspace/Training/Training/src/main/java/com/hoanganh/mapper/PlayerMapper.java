@@ -2,6 +2,7 @@ package com.hoanganh.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import com.hoanganh.model.PlayerModel;
 
@@ -15,7 +16,6 @@ public class PlayerMapper implements RowMapper<PlayerModel>{
 			model.setFullName(result.getString("fullname"));
 			model.setLoseCount(result.getLong("losecount"));
 			model.setWinsCount(result.getLong("winscount"));
-			model.setPoint(result.getLong("points"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -31,5 +31,11 @@ public class PlayerMapper implements RowMapper<PlayerModel>{
 	    }
 	    return point;
 	}
+
+  @Override
+  public Timestamp mapTime(ResultSet result) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 }

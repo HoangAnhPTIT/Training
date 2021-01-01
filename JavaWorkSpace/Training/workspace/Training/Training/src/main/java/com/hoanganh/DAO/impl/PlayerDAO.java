@@ -22,8 +22,8 @@ public class PlayerDAO extends AbstractDAO implements IPlayerDAO {
 
     @Override
     public Long save(PlayerModel model) {
-        String sql = "INSERT INTO player (fullname, points, winscount, losecount) VALUES(?, ?, ?, ?)";
-        return save(sql, model.getFullName(), model.getPoint(), model.getWinsCount(), model.getLoseCount());
+        String sql = "INSERT INTO player (fullname, winscount, losecount) VALUES(?, ?, ?)";
+        return save(sql, model.getFullName(), model.getWinsCount(), model.getLoseCount());
     }
 
     @Override
@@ -32,16 +32,14 @@ public class PlayerDAO extends AbstractDAO implements IPlayerDAO {
         if (modelDB != null) {
             if (model.getFullName() == null) {
                 model.setFullName(modelDB.getFullName());
-            } else if (model.getPoint() == null) {
-                model.setPoint(modelDB.getPoint());
             } else if (model.getLoseCount() == null) {
                 model.setLoseCount(modelDB.getLoseCount());
             } else if (model.getWinsCount() == null) {
                 model.setWinsCount(modelDB.getWinsCount());
             }
         }
-        String sql = "UPDATE player set fullname=?, points=?, losecount=?, winscount=? WHERE id=?";
-        update(sql, model.getFullName(), model.getPoint(), model.getLoseCount(), model.getWinsCount(), model.getPlayer_id());
+        String sql = "UPDATE player set fullname=?, losecount=?, winscount=? WHERE id=?";
+        update(sql, model.getFullName(), model.getLoseCount(), model.getWinsCount(), model.getPlayer_id());
 
     }
 

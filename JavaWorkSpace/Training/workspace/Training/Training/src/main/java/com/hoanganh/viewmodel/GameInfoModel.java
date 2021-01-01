@@ -1,4 +1,4 @@
-package com.hoanganh.model;
+package com.hoanganh.viewmodel;
 
 import java.util.ArrayList;
 import java.util.List;

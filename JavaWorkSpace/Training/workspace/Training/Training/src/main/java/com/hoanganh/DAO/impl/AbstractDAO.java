@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,8 @@ public class AbstractDAO {
           statement.setNull(index, Types.NULL);
         } else if (parameter instanceof Integer) {
           statement.setInt(index, (int) parameter);
+        } else if (parameter instanceof Timestamp) {
+          statement.setTimestamp(index, (Timestamp) parameter);
         }
       }
 
@@ -71,7 +74,7 @@ public class AbstractDAO {
         if (connection != null) {
           connection.close();
         } else if (statement != null) {
-          connection.close();
+          statement.close();
         } else if (result != null) {
           result.close();
         }
@@ -108,7 +111,7 @@ public class AbstractDAO {
         if (connection != null) {
           connection.close();
         } else if (statement != null) {
-          connection.close();
+          statement.close();
         } else if (result != null) {
           result.close();
         }
@@ -121,7 +124,81 @@ public class AbstractDAO {
 
     }
   }
+  
+  public <T> Timestamp queryTime(String sql, RowMapper<T> rowMapper, Object... parameters) {
+    Timestamp time = null;
+    Connection connection = getConnection();
+    PreparedStatement statement = null;
+    ResultSet result = null;
 
+    try {
+      statement = connection.prepareStatement(sql);
+      setParameter(statement, parameters);
+      result = statement.executeQuery();
+      while (result.next()) {
+        time = rowMapper.mapTime(result);
+      }
+      return time;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      return null;
+    } finally {
+      try {
+        if (connection != null) {
+          connection.close();
+        } else if (statement != null) {
+          statement.close();
+        } else if (result != null) {
+          result.close();
+        }
+
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        return null;
+      }
+
+    }
+  }
+  
+  public <T> Long queryId(String sql, Object... parameters) {
+    Long id = null;
+    Connection connection = getConnection();
+    PreparedStatement statement = null;
+    ResultSet result = null;
+
+    try {
+      statement = connection.prepareStatement(sql);
+      setParameter(statement, parameters);
+      result = statement.executeQuery();
+      while (result.next()) {
+        id = result.getLong("id");
+      }
+      return id;
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      return null;
+    } finally {
+      try {
+        if (connection != null) {
+          connection.close();
+        } else if (statement != null) {
+          statement.close();
+        } else if (result != null) {
+          result.close();
+        }
+
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        return null;
+      }
+
+    }
+  }
+  
   public <T> Long save(String sql, Object... parameters) {
     Connection connection = getConnection();
     PreparedStatement statement = null;
