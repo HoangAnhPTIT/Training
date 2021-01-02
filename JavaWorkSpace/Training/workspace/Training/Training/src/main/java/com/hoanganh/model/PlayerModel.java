@@ -1,7 +1,9 @@
 package com.hoanganh.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerModel {
   private Long player_id;
@@ -9,7 +11,12 @@ public class PlayerModel {
   private Long loseCount;
   private Long winsCount;
   private Long[] ids;
-
+  private String userName;
+  private String password;
+  private Integer status;
+  
+  private Map<String, String> player = new HashMap<String, String>();
+  
   private List<PlayerModel> listPlayerModel = new ArrayList<>();
 
   public Long getPlayer_id() {
@@ -58,6 +65,38 @@ public class PlayerModel {
 
   public void setIds(Long[] ids) {
     this.ids = ids;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Integer getStatus() {
+    return status;
+  }
+
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
+
+  public Map<String, String> getPlayer() {
+    return player;
+  }
+
+  public void setPlayer(Map<String, String> player) {
+    this.player = player;
   }
 
 }

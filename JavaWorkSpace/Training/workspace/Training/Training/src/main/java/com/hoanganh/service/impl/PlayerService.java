@@ -2,8 +2,6 @@ package com.hoanganh.service.impl;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.hoanganh.DAO.IPlayerDAO;
 import com.hoanganh.DAO.impl.PlayerDAO;
 import com.hoanganh.model.PlayerModel;
@@ -43,6 +41,17 @@ public class PlayerService implements IPlayerService{
     @Override
     public PlayerModel findOne(Long id) {
         return playerDAO.findOne(id);
+    }
+
+    @Override
+    public PlayerModel findByUsernameAndPassword(String username, String password) {
+      return playerDAO.findByUsernameAndPassword(username, password);
+    }
+
+    @Override
+    public void updateStatus(Long id, int status) {
+      playerDAO.updateStatus(id, status);
+      
     }
 	
 }

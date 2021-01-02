@@ -11,4 +11,6 @@ public interface IPlayerService {
 	void update(PlayerModel model);
 	void delete(Long[] ids);
 	Long findPointById(Long id);
+	PlayerModel findByUsernameAndPassword(String username, String password);
+	void updateStatus(Long id, int status);
 }

@@ -2,12 +2,9 @@ package com.hoanganh.DAO.impl;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.hoanganh.DAO.IPlayerDAO;
 import com.hoanganh.mapper.PlayerMapper;
 import com.hoanganh.model.PlayerModel;
-import com.hoanganh.service.IPlayerService;
 
 public class PlayerDAO extends AbstractDAO implements IPlayerDAO {
 
@@ -64,6 +61,20 @@ public class PlayerDAO extends AbstractDAO implements IPlayerDAO {
         String sql = "SELECT * FROM player WHERE id=?";
         List<PlayerModel> list = query(sql, new PlayerMapper(), id);
         return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public PlayerModel findByUsernameAndPassword(String username, String password) {
+      String sql = "SELECT * FROM player WHERE username=? AND password=?";
+      List<PlayerModel> models = query(sql, new PlayerMapper(), username, password);
+      return models.isEmpty() ? null : models.get(0);
+    }
+
+    @Override
+    public void updateStatus(Long id, int status) {
+      String sql = "UPDATE player SET status=? WHERE id=?";
+      save(sql, status, id);
+      
     }
 
 }

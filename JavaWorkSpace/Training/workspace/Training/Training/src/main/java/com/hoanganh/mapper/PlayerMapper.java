@@ -16,6 +16,9 @@ public class PlayerMapper implements RowMapper<PlayerModel>{
 			model.setFullName(result.getString("fullname"));
 			model.setLoseCount(result.getLong("losecount"));
 			model.setWinsCount(result.getLong("winscount"));
+			model.setPassword(result.getString("password"));
+			model.setUserName(result.getString("username"));
+			model.setStatus(result.getInt("status"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

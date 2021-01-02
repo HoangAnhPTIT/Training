@@ -53,6 +53,58 @@ public class GameController extends HttpServlet {
   private SetListPlayer setListPlayer = new SetListPlayer();
 
   @POST
+  @Path("/login")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void login(@Context HttpServletRequest request, @Context HttpServletResponse response,
+      InputStream requestBody) throws ServletException, IOException{
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+    PlayerModel playerModel = HttpUtil.of(reader).toModel(PlayerModel.class);
+    Map<String, String> player = new HashMap<String, String>();
+    player = playerModel.getPlayer();
+    String username = player.get("username");
+    String password = player.get("password");
+    PlayerModel playerLogin = playerService.findByUsernameAndPassword(username, password);
+    if(playerLogin == null) {
+      mapper.writeValue(response.getOutputStream(), "username or password invalid");
+      return;
+    } else if(playerLogin.getStatus()==1){
+      mapper.writeValue(response.getOutputStream(), "Player was in game");
+      return;
+    }
+    else {
+      playerService.updateStatus(playerLogin.getPlayer_id(), 1);
+      mapper.writeValue(response.getOutputStream(), "Login success");
+      return;
+    }
+    
+  }
+  @POST
+  @Path("/logout")
+  @Consumes({ MediaType.APPLICATION_JSON })
+  @Produces({ MediaType.APPLICATION_JSON })
+  public void logout(@Context HttpServletRequest request, @Context HttpServletResponse response,
+      InputStream requestBody) throws ServletException, IOException{
+    ObjectMapper mapper = new ObjectMapper();
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+    PlayerModel playerModel = HttpUtil.of(reader).toModel(PlayerModel.class);
+    PlayerModel playerLogout = playerService.findOne(playerModel.getPlayer_id());
+    if(playerLogout == null) {
+      mapper.writeValue(response.getOutputStream(), "player's id invalid");
+      return;
+    } else {
+      playerService.updateStatus(playerLogout.getPlayer_id(), 0);
+      mapper.writeValue(response.getOutputStream(), "Logout success");
+      return;
+    }
+  }
+  
+  @POST
   @Path("/")
   @Consumes({ MediaType.APPLICATION_JSON })
   @Produces({ MediaType.APPLICATION_JSON })
@@ -73,8 +125,8 @@ public class GameController extends HttpServlet {
       Map<String, String> player = new HashMap<String, String>();
       Long id = ids.get(i);
       PlayerModel modelLogIn = playerService.findOne(id);
-      if (modelLogIn == null) {
-        mapper.writeValue(response.getOutputStream(), "Id invalid, Restart Game ???");
+      if (modelLogIn == null || modelLogIn.getStatus()==0) {
+        mapper.writeValue(response.getOutputStream(), "Id Invalid Or Not Login, Restart Game ???");
         return;
       } else {
         player.put("id", id.toString());
