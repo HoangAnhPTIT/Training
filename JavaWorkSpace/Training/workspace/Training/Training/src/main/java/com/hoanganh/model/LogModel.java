@@ -1,6 +1,8 @@
 package com.hoanganh.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogModel {
   private Long id;
@@ -8,23 +10,21 @@ public class LogModel {
   private Long player2;
   private Long point1;
   private Long point2;
-  private Long cPoint1;
-  private Long cPoint2;
   private Timestamp timePlay;
   private int inGame;
-
+  private Long gameId;
   
+  private List<LogModel> listModel = new ArrayList<>();
   
-  public LogModel(Long player1, Long player2, Long point1, Long point2, Long cPoint1, Long cPoint2, Timestamp timePlay,
-      int inGame) {
+  public LogModel(Long player1, Long player2, Long point1, Long point2, Timestamp timePlay,
+      int inGame, Long gameId) {
     this.player1 = player1;
     this.player2 = player2;
     this.point1 = point1;
     this.point2 = point2;
-    this.cPoint1 = cPoint1;
-    this.cPoint2 = cPoint2;
     this.timePlay = timePlay;
     this.inGame = inGame;
+    this.gameId = gameId;
   }
 
   public LogModel() {
@@ -71,22 +71,6 @@ public class LogModel {
     this.point2 = point2;
   }
 
-  public Long getcPoint1() {
-    return cPoint1;
-  }
-
-  public void setcPoint1(Long cPoint1) {
-    this.cPoint1 = cPoint1;
-  }
-
-  public Long getcPoint2() {
-    return cPoint2;
-  }
-
-  public void setcPoint2(Long cPoint2) {
-    this.cPoint2 = cPoint2;
-  }
-
   public Timestamp getTimePlay() {
     return timePlay;
   }
@@ -101,6 +85,22 @@ public class LogModel {
 
   public void setInGame(int inGame) {
     this.inGame = inGame;
+  }
+
+  public Long getGameId() {
+    return gameId;
+  }
+
+  public void setGameId(Long gameId) {
+    this.gameId = gameId;
+  }
+
+  public List<LogModel> getListModel() {
+    return listModel;
+  }
+
+  public void setListModel(List<LogModel> listModel) {
+    this.listModel = listModel;
   }
 
 }

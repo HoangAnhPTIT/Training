@@ -14,6 +14,7 @@ public class PlayerModel {
   private String userName;
   private String password;
   private Integer status;
+  private Long totalPoint;
   
   private Map<String, String> player = new HashMap<String, String>();
   
@@ -99,4 +100,11 @@ public class PlayerModel {
     this.player = player;
   }
 
+  public Long getTotalPoint() {
+    return totalPoint;
+  }
+
+  public void setTotalPoint(Long totalPoint) {
+    this.totalPoint = totalPoint;
+  }
 }

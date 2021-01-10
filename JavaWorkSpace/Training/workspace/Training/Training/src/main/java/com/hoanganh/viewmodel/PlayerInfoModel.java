@@ -6,7 +6,8 @@ public class PlayerInfoModel {
   private String fullName;
   private Long loseCount;
   private Long winsCount;
-  private Long currentPoint;
+  private Integer status;
+  
   public Long getPlayer_id() {
     return player_id;
   }
@@ -37,11 +38,11 @@ public class PlayerInfoModel {
   public void setWinsCount(Long winsCount) {
     this.winsCount = winsCount;
   }
-  public Long getCurrentPoint() {
-    return currentPoint;
+  public Integer getStatus() {
+    return status;
   }
-  public void setCurrentPoint(Long currentPoint) {
-    this.currentPoint = currentPoint;
+  public void setStatus(Integer status) {
+    this.status = status;
   }
   
   

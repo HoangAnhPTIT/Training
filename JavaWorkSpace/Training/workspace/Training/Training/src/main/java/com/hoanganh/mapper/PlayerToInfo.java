@@ -7,9 +7,11 @@ public class PlayerToInfo {
   public PlayerInfoModel mapper(PlayerModel playerModel) {
     PlayerInfoModel infoModel = new PlayerInfoModel();
     infoModel.setFullName(playerModel.getFullName());
-    infoModel.setPlayer_id(infoModel.getPlayer_id());
+    infoModel.setPlayer_id(playerModel.getPlayer_id());
     infoModel.setLoseCount(playerModel.getLoseCount());
     infoModel.setWinsCount(playerModel.getWinsCount());
+    infoModel.setPoint(playerModel.getTotalPoint());
+    infoModel.setStatus(playerModel.getStatus());
     return infoModel;
 
   }

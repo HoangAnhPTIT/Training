@@ -14,7 +14,7 @@ public class GameModel {
   private Long player1;
   private Long player2;
   private Long winner;
-  
+  private Integer status;
   private List<GameModel> listGameModel = new ArrayList<>();
   
   public Long getId() {
@@ -71,6 +71,14 @@ public class GameModel {
 
   public void setListGameModel(List<GameModel> listGameModel) {
     this.listGameModel = listGameModel;
+  }
+
+  public Integer getStatus() {
+    return status;
+  }
+
+  public void setStatus(Integer status) {
+    this.status = status;
   }
 
 }

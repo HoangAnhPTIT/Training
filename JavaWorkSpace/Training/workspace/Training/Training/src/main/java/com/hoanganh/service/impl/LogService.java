@@ -1,6 +1,7 @@
 package com.hoanganh.service.impl;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.hoanganh.DAO.ILogDAO;
 import com.hoanganh.DAO.impl.LogDAO;
@@ -55,6 +56,22 @@ public class LogService implements ILogService {
   public void updatePoint(Long id, Long point, Long cpoint) {
     logDAO.updatePoint(id, point, cpoint);
     
+  }
+
+  @Override
+  public List<LogModel> findListLast(Long id) {
+    return logDAO.findListLast(id);
+  }
+
+  @Override
+  public void delete(Long id) {
+    logDAO.delete(id);
+    
+  }
+
+  @Override
+  public LogModel findByGameIdAndStatus(Long gameId, int status) {
+    return logDAO.findByGameIdAndStatus(gameId, status);
   }
 
 }

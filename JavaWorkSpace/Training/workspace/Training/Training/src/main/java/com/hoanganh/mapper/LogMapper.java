@@ -15,12 +15,11 @@ public class LogMapper implements RowMapper<LogModel>{
        model.setId(result.getLong("id"));
        model.setPlayer1(result.getLong("player1"));
        model.setPlayer2(result.getLong("player2"));
-       model.setcPoint1(result.getLong("cpoint1"));
-       model.setcPoint2(result.getLong("cpoint2"));
        model.setPoint1(result.getLong("point1"));
        model.setPoint2(result.getLong("point2"));
        model.setInGame(result.getInt("ingame"));
        model.setTimePlay(result.getTimestamp("timeplay"));
+       model.setGameId(result.getLong("gameid"));
      } catch(SQLException e) {
        e.printStackTrace();
      }

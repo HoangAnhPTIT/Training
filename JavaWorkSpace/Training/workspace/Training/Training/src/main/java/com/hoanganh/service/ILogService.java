@@ -1,6 +1,7 @@
 package com.hoanganh.service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.hoanganh.model.LogModel;
 
@@ -14,4 +15,7 @@ public interface ILogService {
   LogModel findOne(Long id);
   LogModel modelNearest(Long player1, Long player2, Timestamp timeplay);
   void updatePoint(Long id, Long point, Long cpoint);
+  List<LogModel> findListLast(Long id);
+  void delete(Long id);
+  LogModel findByGameIdAndStatus(Long gameId, int status);
 }
